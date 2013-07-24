@@ -9,6 +9,7 @@ local ffi_str = ffi.string
 ffi.cdef[[
     typedef unsigned char uuid_t[16];
     void uuid_generate(uuid_t out);
+    void uuid_generate_random(uuid_t out)
     void uuid_unparse(const uuid_t uu, char *out);
 ]]
 
@@ -17,8 +18,8 @@ local libuuid = ffi.load("libuuid")
 function generate()
     if libuuid then
         local uuid   = ffi_new("uuid_t")
-        local result = ffi_new("char[36]")
-        libuuid.uuid_generate(uuid)
+        local result = ffi_new("char[72]")
+        libuuid.uuid_generate_random(uuid)
         libuuid.uuid_unparse(uuid, result)
         return ffi_str(result)
     end
